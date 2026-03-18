@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JVA Financeira – Crédito para Você do CadÚnico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Roboto+Slab:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --primary:          #4777C8;
+      --primary-dark:     #393763;
+      --secondary:        #FF9900;
+      --secondary-hover:  #e68a00;
+      --background:       #FFFFFF;
+      --background-alt:   #F4F4F4;
+      --background-steps: #E3E3E3;
+      --text:             #54595F;
+      --text-light:       #FFFFFF;
+      --text-muted:       #7A7A7A;
+      --text-heading:     #4777C8;
+      --text-accent:      #FF9900;
+      --font-display:     "Alfa Slab One", sans-serif;
+      --font-body:        "Roboto Slab", sans-serif;
+      --radius-sm:        10px;
+      --radius-md:        20px;
+      --radius-lg:        30px;
+      --spacing-xl:       60px;
+      --spacing-2xl:      80px;
+      --container-max:    1140px;
+      --nav-height:       91px;
+      --whatsapp-green:   #25D366;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: var(--text);
+      background: var(--background);
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    .navbar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+    }
+    .navbar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .navbar-logo svg {
+      height: 52px;
+      width: 52px;
+    }
+    .navbar-logo-text {
+      font-family: var(--font-display);
+      font-size: 20px;
+      color: #FFFFFF;
+      line-height: 1.1;
+    }
+    .navbar-logo-text span {
+      color: var(--secondary);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 500;
+      color: #FFFFFF;
+      padding: 13px 8px;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--secondary); }
+    .btn-nav-cta {
+      background-color: var(--secondary);
+      color: #FFFFFF;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 12px 24px;
+      border-radius: var(--radius-lg);
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.3s;
+      flex-shrink: 0;
+    }
+    .btn-nav-cta:hover { background-color: var(--secondary-hover); }
+
+    /* Mobile nav toggle */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 3px;
+      background: #fff;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    .hero {
+      background: linear-gradient(170deg, var(--primary) 0%, var(--primary-dark) 100%);
+      min-height: 621px;
+      padding-top: calc(var(--nav-height) + var(--spacing-2xl));
+      padding-bottom: var(--spacing-2xl);
+      display: flex;
+      align-items: center;
+    }
+    .hero .container {
+      display: grid;
+      grid-template-columns: 55% 45%;
+      gap: 32px;
+      align-items: center;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-body);
+      font-size: 25px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 30px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 16px;
+    }
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: 50px;
+      font-weight: 500;
+      color: var(--secondary);
+      line-height: 60px;
+      margin-bottom: 20px;
+    }
+    .hero-subtitle {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 300;
+      color: #FFFFFF;
+      line-height: 24px;
+      max-width: 480px;
+      margin-bottom: 32px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background-color: var(--secondary);
+      color: #FFFFFF;
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 15px 30px;
+      border-radius: var(--radius-lg);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .btn-primary:hover { background-color: var(--secondary-hover); }
+    .btn-secondary {
+      background-color: #FFFFFF;
+      color: var(--primary);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 15px 30px;
+      border-radius: var(--radius-lg);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .btn-secondary:hover { background-color: #f0f4fc; }
+
+    /* Hero Form Card */
+    .hero-form-card {
+      background-color: var(--background-alt);
+      border-radius: var(--radius-md);
+      padding: 28px 24px;
+    }
+    .form-card-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--text);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .form-input {
+      background-color: #FFFFFF;
+      border: 0.8px solid #F4F4F4;
+      border-radius: var(--radius-md);
+      padding: 10px 15px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text-muted);
+      height: 43px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input::placeholder { color: var(--text-muted); }
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(71,119,200,0.2);
+    }
+    .form-input-full { grid-column: 1 / -1; }
+    .form-checkbox-row {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .form-checkbox {
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .form-checkbox-label {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .form-checkbox-label a { color: var(--primary); text-decoration: underline; }
+    .btn-form-submit {
+      grid-column: 1 / -1;
+      background-color: var(--secondary);
+      color: #FFFFFF;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      height: 50px;
+      border-radius: var(--radius-md);
+      border: none;
+      width: 100%;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 8px;
+    }
+    .btn-form-submit:hover { background-color: var(--secondary-hover); }
+
+    /* ============================================================
+       SECTION: ABOUT / CRÉDITO
+    ============================================================ */
+    .section-about {
+      padding: var(--spacing-xl) 0;
+      background: var(--background);
+    }
+    .section-about .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .section-title-blue {
+      font-family: var(--font-display);
+      font-size: 45px;
+      font-weight: 400;
+      color: var(--primary);
+      line-height: 54px;
+      margin-bottom: 20px;
+    }
+    .section-title-blue span { color: var(--secondary); }
+    .section-text {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 24px;
+      margin-bottom: 16px;
+    }
+
+    /* ============================================================
+       SECTION: VANTAGENS
+    ============================================================ */
+    .section-vantagens {
+      padding: var(--spacing-xl) 0;
+      background: var(--background-alt);
+    }
+    .section-label {
+      font-family: var(--font-display);
+      font-size: 25px;
+      font-weight: 400;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      padding: 32px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+    }
+    .feature-card-icon {
+      color: var(--secondary);
+      width: 60px;
+      height: 60px;
+    }
+    .feature-card h2 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text);
+    }
+    .feature-card p {
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: var(--text);
+      line-height: 24px;
+    }
+
+    /* ============================================================
+       SECTION: QUEM PODE CONTRATAR
+    ============================================================ */
+    .section-who {
+      padding: var(--spacing-xl) 0;
+      background: var(--background-steps);
+    }
+    .section-who .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .who-list {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .who-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: var(--text);
+    }
+    .who-list li::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--secondary);
+      flex-shrink: 0;
+    }
+    .who-illustration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .who-illustration svg {
+      width: 100%;
+      max-width: 380px;
+    }
+
+    /* ============================================================
+       SECTION: 3 PASSOS
+    ============================================================ */
+    .section-steps {
+      padding: var(--spacing-xl) 0;
+      background: var(--background-steps);
+      border-top: 1px solid #d4d4d4;
+    }
+    .steps-title {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 400;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .step-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      padding: 32px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .step-number {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--secondary);
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-card h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      color: var(--text);
+    }
+    .step-card p {
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text);
+      line-height: 22px;
+    }
+
+    /* ============================================================
+       SECTION: TESTEMUNHOS
+    ============================================================ */
+    .section-reviews {
+      padding: var(--spacing-xl) 0;
+      background: var(--background);
+    }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 40px;
+    }
+    .review-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .review-stars {
+      color: var(--secondary);
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    .review-text {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--text);
+      line-height: 22px;
+      margin-bottom: 16px;
+    }
+    .review-author {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* ============================================================
+       SECTION: POR QUE FAZER COM A GENTE
+    ============================================================ */
+    .section-why {
+      padding: var(--spacing-xl) 0;
+      background: var(--background-alt);
+    }
+    .section-why .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .why-list {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .why-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .why-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .why-icon svg { width: 20px; height: 20px; stroke: #fff; }
+    .why-item-text h4 {
+      font-family: var(--font-display);
+      font-size: 17px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .why-item-text p {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--text);
+      line-height: 20px;
+    }
+
+    /* ============================================================
+       SECTION: FAQ
+    ============================================================ */
+    .section-faq {
+      padding: var(--spacing-xl) 0;
+      background: var(--background-alt);
+      border-top: 1px solid #e0e0e0;
+    }
+    .faq-title {
+      font-family: var(--font-display);
+      font-size: 30px;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: #FFFFFF;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid #e3e3e3;
+    }
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 18px 20px;
+      text-align: left;
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .faq-question:hover { color: var(--primary); }
+    .faq-arrow {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      transition: transform 0.3s;
+      color: var(--secondary);
+    }
+    .faq-answer {
+      display: none;
+      padding: 0 20px 18px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text);
+      line-height: 22px;
+    }
+    .faq-item.open .faq-answer { display: block; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+    /* ============================================================
+       SECTION: CONTATO / CTA FINAL
+    ============================================================ */
+    .section-contact {
+      padding: var(--spacing-xl) 0;
+      background: var(--primary);
+      text-align: center;
+    }
+    .contact-title {
+      font-family: var(--font-display);
+      font-size: 40px;
+      color: #FFFFFF;
+      margin-bottom: 16px;
+    }
+    .contact-subtitle {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 32px;
+    }
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .contact-info-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #FFFFFF;
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .contact-info-item svg { width: 24px; height: 24px; stroke: var(--secondary); }
+
+    /* ============================================================
+       FOOTER LEGAL
+    ============================================================ */
+    .footer-legal {
+      background: var(--primary-dark);
+      padding: 24px 0;
+      text-align: center;
+    }
+    .footer-legal p {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      line-height: 20px;
+    }
+    .footer-legal strong { color: rgba(255,255,255,0.9); }
+
+    /* ============================================================
+       FLOATING BUTTONS
+    ============================================================ */
+    .floating-btns {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 999;
+    }
+    .btn-whatsapp-float {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--whatsapp-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+    .btn-whatsapp-float:hover { transform: scale(1.08); }
+    .btn-whatsapp-float svg { width: 32px; height: 32px; fill: #fff; }
+    .btn-scroll-top {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--secondary);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.2s;
+    }
+    .btn-scroll-top.visible { opacity: 1; pointer-events: auto; }
+    .btn-scroll-top:hover { transform: scale(1.08); }
+    .btn-scroll-top svg { width: 22px; height: 22px; stroke: #fff; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1024px) {
+      .hero .container { grid-template-columns: 1fr; }
+      .hero-form-card { max-width: 520px; margin: 0 auto; }
+      .section-about .container,
+      .section-who .container,
+      .section-why .container { grid-template-columns: 1fr; }
+      .who-illustration { display: none; }
+    }
+
+    @media (max-width: 767px) {
+      .nav-links, .btn-nav-cta { display: none; }
+      .nav-toggle { display: flex; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: var(--nav-height);
+        left: 0; right: 0;
+        background: var(--secondary);
+        padding: 16px 20px;
+        gap: 0;
+      }
+      .nav-links.open a { padding: 10px 0; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.2); }
+      .hero-headline { font-size: 36px; line-height: 44px; }
+      .hero-eyebrow { font-size: 18px; }
+      .section-title-blue { font-size: 32px; line-height: 40px; }
+      .cards-grid, .steps-grid, .reviews-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-input-full { grid-column: auto; }
+      .contact-info { flex-direction: column; align-items: center; gap: 20px; }
+      .contact-title { font-size: 28px; }
+      .steps-title { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVBAR
+  ============================================================ -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#" class="navbar-logo" aria-label="JVA Financeira">
+        <!-- Logo JVA Financeira — ícone analytics azul/laranja -->
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="JVA Financeira logo">
+          <rect width="100" height="100" rx="18" fill="#1A3A8F"/>
+          <rect width="100" height="100" rx="18" fill="url(#grad-logo)"/>
+          <defs>
+            <linearGradient id="grad-logo" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#2355B0"/>
+              <stop offset="100%" stop-color="#1A2E7A"/>
+            </linearGradient>
+          </defs>
+          <!-- Line chart path -->
+          <polyline
+            points="18,72 38,48 58,58 80,26"
+            fill="none"
+            stroke="#FF9900"
+            stroke-width="7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <!-- Dots on the chart -->
+          <circle cx="18" cy="72" r="7" fill="#FF9900"/>
+          <circle cx="38" cy="48" r="7" fill="#FF9900"/>
+          <circle cx="58" cy="58" r="7" fill="#FF9900"/>
+          <circle cx="80" cy="26" r="7" fill="#FF9900"/>
+          <!-- Inner white rings -->
+          <circle cx="18" cy="72" r="3.5" fill="#fff"/>
+          <circle cx="38" cy="48" r="3.5" fill="#fff"/>
+          <circle cx="58" cy="58" r="3.5" fill="#fff"/>
+          <circle cx="80" cy="26" r="3.5" fill="#fff"/>
+        </svg>
+        <span class="navbar-logo-text">JVA<br/><span>Financeira</span></span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#sobre">O que é?</a></li>
+        <li><a href="#quem-pode">Quem pode contratar</a></li>
+        <li><a href="#como-funciona">Como funciona</a></li>
+        <li><a href="#sobre-nos">Quem somos</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+
+      <a href="https://wa.me/5500000000000" class="btn-nav-cta" target="_blank" rel="noopener">
+        Chamar no WhatsApp
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section class="hero" id="inicio">
+    <div class="container">
+      <!-- Coluna Esquerda -->
+      <div class="hero-content">
+        <p class="hero-eyebrow">Beneficiários do CadÚnico</p>
+        <h2 class="hero-headline">O crédito que investe<br/>no seu futuro chegou</h2>
+        <p class="hero-subtitle">
+          Descubra as novas modalidades de crédito disponíveis para beneficiários do CadÚnico.
+          Condições especiais, sem burocracia e com atendimento humanizado.
+        </p>
+        <div class="hero-buttons">
+          <a href="#sobre" class="btn-secondary">Saiba Mais</a>
+          <a href="#contato" class="btn-primary">Simular Agora!</a>
+        </div>
+      </div>
+
+      <!-- Coluna Direita — Formulário -->
+      <div class="hero-form-card">
+        <h3 class="form-card-title">Solicite seu crédito aqui!</h3>
+        <form action="#" method="post">
+          <div class="form-row">
+            <input class="form-input form-input-full" type="text" name="nome" placeholder="Informe o seu Nome Completo" required />
+            <input class="form-input" type="tel" name="telefone" placeholder="Telefone / WhatsApp" required />
+            <input class="form-input" type="text" name="cpf" placeholder="CPF" required />
+            <input class="form-input" type="text" name="cidade" placeholder="Cidade" />
+            <input class="form-input" type="text" name="estado" placeholder="Estado" />
+            <label class="form-checkbox-row">
+              <input class="form-checkbox" type="checkbox" name="termos" required />
+              <span class="form-checkbox-label">
+                Concordo com os <a href="#">Termos de Uso</a> e a
+                <a href="#">Política de Privacidade</a>.
+              </span>
+            </label>
+            <button type="submit" class="btn-form-submit">EU QUERO MEU CRÉDITO!</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SOBRE / CRÉDITO
+  ============================================================ -->
+  <section class="section-about" id="sobre">
+    <div class="container">
+      <div>
+        <h2 class="section-title-blue">
+          Crédito para Você<br/>do <span>CadÚnico</span>
+        </h2>
+        <p class="section-text">
+          A <strong>JVA Financeira</strong> chegou para transformar o acesso ao crédito para beneficiários
+          do CadÚnico. Com taxas reduzidas, aprovação simplificada e 100% digital, facilitamos o caminho
+          para que você conquiste seus objetivos financeiros.
+        </p>
+        <p class="section-text">
+          Nossa missão é oferecer soluções financeiras acessíveis, transparentes e justas para quem
+          mais precisa — sem letras miúdas e sem surpresas.
+        </p>
+        <a href="#contato" class="btn-primary" style="display:inline-block;margin-top:8px;">
+          Solicitar Agora
+        </a>
+      </div>
+      <div class="hero-form-card" id="simulacao">
+        <h3 class="form-card-title">Simule o seu crédito</h3>
+        <form action="#" method="post">
+          <div class="form-row">
+            <input class="form-input form-input-full" type="text" name="nome" placeholder="Nome Completo" />
+            <input class="form-input form-input-full" type="tel" name="whatsapp" placeholder="WhatsApp" />
+            <input class="form-input" type="text" name="valor" placeholder="Valor desejado" />
+            <input class="form-input" type="text" name="cpf" placeholder="CPF" />
+            <label class="form-checkbox-row">
+              <input class="form-checkbox" type="checkbox" name="aceito" required />
+              <span class="form-checkbox-label">
+                Li e aceito a <a href="#">Política de Privacidade</a>.
+              </span>
+            </label>
+            <button type="submit" class="btn-form-submit">SIMULAR AGORA!</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       VANTAGENS
+  ============================================================ -->
+  <section class="section-vantagens" id="vantagens">
+    <div class="container">
+      <h2 class="section-label">Muitas Vantagens para Você</h2>
+      <div class="cards-grid">
+
+        <div class="feature-card">
+          <svg class="feature-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          <h2>Taxas Reduzidas</h2>
+          <p>Juros mais baixos do mercado para beneficiários do CadÚnico, garantindo parcelas que cabem no seu bolso.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <h2>Aprovação Simplificada</h2>
+          <p>Menos burocracia e mais agilidade. Processo 100% digital com resposta em até 24 horas.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+          </svg>
+          <h2>Previsibilidade Total</h2>
+          <p>Você sabe exatamente quanto vai pagar em cada parcela, do início ao fim do contrato, sem surpresas.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <h2>100% Seguro</h2>
+          <p>Seus dados e transações protegidos com criptografia de ponta a ponta e total conformidade com a LGPD.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.23 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 5.55 5.55l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <h2>Suporte Humanizado</h2>
+          <p>Atendimento via WhatsApp com especialistas prontos para tirar todas as suas dúvidas rapidamente.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <h2>Liberação Rápida</h2>
+          <p>Dinheiro na conta em até 1 dia útil após a aprovação. Sem filas, sem deslocamento, sem complicação.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       QUEM PODE CONTRATAR
+  ============================================================ -->
+  <section class="section-who" id="quem-pode">
+    <div class="container">
+      <div>
+        <h2 class="section-title-blue">Quem pode contratar?</h2>
+        <p class="section-text">
+          O crédito da JVA Financeira foi desenvolvido especialmente para quem precisa de condições
+          mais acessíveis. Veja se você se enquadra:
+        </p>
+        <ul class="who-list">
+          <li>Beneficiários do CadÚnico (Cadastro Único)</li>
+          <li>Recebedores do Bolsa Família</li>
+          <li>Trabalhadores do setor informal</li>
+          <li>Aposentados e pensionistas do INSS</li>
+          <li>Pessoas com renda familiar de até 3 salários mínimos</li>
+          <li>Brasileiros maiores de 18 anos</li>
+        </ul>
+        <a href="#contato" class="btn-primary" style="display:inline-block;margin-top:28px;">
+          Quero Contratar
+        </a>
+      </div>
+      <div class="who-illustration" aria-hidden="true">
+        <!-- Ilustração decorativa -->
+        <svg viewBox="0 0 380 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="190" cy="190" r="160" fill="#4777C8" opacity="0.08"/>
+          <circle cx="190" cy="190" r="110" fill="#4777C8" opacity="0.1"/>
+          <!-- Pessoa estilizada -->
+          <circle cx="190" cy="120" r="45" fill="#4777C8"/>
+          <path d="M100 300 C100 240 280 240 280 300 L280 340 L100 340 Z" fill="#4777C8"/>
+          <!-- Checkmarks -->
+          <circle cx="300" cy="180" r="28" fill="#FF9900"/>
+          <polyline points="288,180 296,190 314,170" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="80" cy="220" r="22" fill="#FF9900"/>
+          <polyline points="70,220 77,228 92,212" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       3 PASSOS
+  ============================================================ -->
+  <section class="section-steps" id="como-funciona">
+    <div class="container">
+      <h2 class="steps-title">São apenas 3 passos</h2>
+      <div class="steps-grid">
+
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FF9900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/><line x1="9" y1="15" x2="12" y2="15"/>
+          </svg>
+          <h3>Preencha o Formulário</h3>
+          <p>Informe seus dados básicos no formulário acima. Leva menos de 2 minutos e é 100% gratuito.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FF9900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="1" width="14" height="22" rx="2"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <h3>Aguarde a Análise</h3>
+          <p>Nossa equipe analisa seu perfil e retorna em até 24 horas com as melhores opções disponíveis para você.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FF9900" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+          <h3>Receba na Conta</h3>
+          <p>Crédito aprovado! O valor é depositado diretamente na sua conta em até 1 dia útil. Simples assim.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TESTEMUNHOS
+  ============================================================ -->
+  <section class="section-reviews" id="testemunhos">
+    <div class="container">
+      <h2 class="section-title-blue" style="text-align:center;">O que dizem nossos clientes</h2>
+      <div class="reviews-grid">
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Processo super rápido! Enviei os documentos pelo celular e em menos de 24h o dinheiro já estava na minha conta. Recomendo muito a JVA Financeira!"</p>
+          <span class="review-author">— Maria S., Beneficiária CadÚnico</span>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Achei que seria difícil conseguir crédito, mas a equipe da JVA me orientou em cada passo. As taxas são realmente mais baixas do que eu esperava."</p>
+          <span class="review-author">— João P., Aposentado</span>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Atendimento humanizado de verdade. Sem enrolação, sem letras miúdas. Consegui o crédito que precisava para reformar minha casa. Obrigada JVA!"</p>
+          <span class="review-author">— Ana L., Trabalhadora Autônoma</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       POR QUE FAZER COM A GENTE
+  ============================================================ -->
+  <section class="section-why" id="sobre-nos">
+    <div class="container">
+      <div>
+        <h2 class="section-title-blue">Por que FAZER com a gente!</h2>
+        <p class="section-text">
+          A JVA Financeira nasceu com um propósito claro: democratizar o acesso ao crédito responsável
+          para quem realmente precisa. Somos especialistas no público CadÚnico e conhecemos as suas necessidades.
+        </p>
+        <ul class="why-list">
+          <li class="why-item">
+            <div class="why-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="why-item-text">
+              <h4>Empresa Regulamentada</h4>
+              <p>Atuamos dentro das normas do Banco Central e seguimos rigorosamente a LGPD.</p>
+            </div>
+          </li>
+          <li class="why-item">
+            <div class="why-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="why-item-text">
+              <h4>+5.000 Clientes Atendidos</h4>
+              <p>Milhares de famílias já conquistaram seus objetivos financeiros com a nossa ajuda.</p>
+            </div>
+          </li>
+          <li class="why-item">
+            <div class="why-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            </div>
+            <div class="why-item-text">
+              <h4>Nota 5 Estrelas</h4>
+              <p>Avaliação máxima no Google, reflexo do nosso compromisso com a satisfação dos clientes.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <!-- Ilustração decorativa -->
+      <div style="display:flex;justify-content:center;align-items:center;">
+        <svg viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width:320px;width:100%">
+          <circle cx="180" cy="180" r="160" fill="#4777C8" opacity="0.06"/>
+          <rect x="60" y="80" width="240" height="200" rx="16" fill="#4777C8" opacity="0.12"/>
+          <rect x="80" y="100" width="200" height="160" rx="12" fill="#fff" stroke="#4777C8" stroke-width="2"/>
+          <!-- Chart bars -->
+          <rect x="110" y="200" width="28" height="44" rx="4" fill="#4777C8" opacity="0.5"/>
+          <rect x="152" y="175" width="28" height="69" rx="4" fill="#4777C8" opacity="0.7"/>
+          <rect x="194" y="155" width="28" height="89" rx="4" fill="#4777C8"/>
+          <rect x="236" y="135" width="28" height="109" rx="4" fill="#FF9900"/>
+          <!-- Trend line -->
+          <polyline points="124,202 166,177 208,157 250,137" stroke="#FF9900" stroke-width="3" stroke-dasharray="5,3" fill="none"/>
+          <!-- Stars -->
+          <text x="155" y="150" font-size="22" fill="#FF9900">★★★★★</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FAQ
+  ============================================================ -->
+  <section class="section-faq" id="faq">
+    <div class="container">
+      <h2 class="faq-title">Dúvidas Frequentes</h2>
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            O que é o crédito para beneficiários do CadÚnico?
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer">
+            É uma modalidade de crédito desenvolvida especialmente para quem está inscrito no Cadastro Único (CadÚnico). Oferecemos condições diferenciadas, com taxas mais acessíveis e processo simplificado.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Quais documentos são necessários?
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer">
+            Você precisará de RG ou CNH, CPF, comprovante de residência atualizado e o número do NIS (Número de Identificação Social) do CadÚnico. Todo o envio pode ser feito pelo celular.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Em quanto tempo o dinheiro cai na conta?
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer">
+            Após a aprovação do crédito, o valor é depositado diretamente na sua conta corrente em até 1 dia útil. O processo de análise leva no máximo 24 horas.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Posso contratar mesmo com restrição no CPF?
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer">
+            Sim! Nossa análise é diferenciada e não se baseia exclusivamente em consultas ao SPC/Serasa. Para beneficiários do CadÚnico temos políticas especiais de aprovação. Entre em contato e faça sua simulação.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            A JVA Financeira é uma empresa segura?
+            <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-answer">
+            Sim. Somos uma empresa regulamentada, operamos em conformidade com o Banco Central do Brasil e seguimos todas as normas da Lei Geral de Proteção de Dados (LGPD). Seus dados e seu dinheiro estão em boas mãos.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTATO / CTA FINAL
+  ============================================================ -->
+  <section class="section-contact" id="contato">
+    <div class="container">
+      <h2 class="contact-title">Fale com a gente!</h2>
+      <p class="contact-subtitle">
+        Nossos especialistas estão prontos para te ajudar. Entre em contato agora mesmo.
+      </p>
+      <div class="contact-info">
+        <div class="contact-info-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.23 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 5.55 5.55l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          (00) 00000-0000
+        </div>
+        <div class="contact-info-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+          </svg>
+          contato@jvafinanceira.com.br
+        </div>
+        <div class="contact-info-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          Atendimento 100% Online
+        </div>
+      </div>
+      <a href="https://wa.me/5500000000000" class="btn-primary" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:10px;font-size:18px;padding:18px 40px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        Falar no WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER LEGAL
+  ============================================================ -->
+  <footer class="footer-legal">
+    <div class="container">
+      <p>
+        <strong>JVA Financeira</strong> — CNPJ: 00.000.000/0001-00 |
+        Todos os direitos reservados © 2026 |
+        <a href="#" style="color:rgba(255,255,255,0.7);text-decoration:underline;">Política de Privacidade</a> |
+        <a href="#" style="color:rgba(255,255,255,0.7);text-decoration:underline;">Termos de Uso</a>
+      </p>
+      <p style="margin-top:8px;">
+        As condições de crédito estão sujeitas à análise e aprovação. Operação regulamentada pelo Banco Central do Brasil.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       FLOATING BUTTONS
+  ============================================================ -->
+  <div class="floating-btns">
+    <a href="https://wa.me/5500000000000" class="btn-whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+      </svg>
+    </a>
+    <button class="btn-scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ============================================================
+       JS — Minimal interactions
+  ============================================================ -->
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    // Close nav on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // Scroll-to-top visibility
+    const scrollBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', () => {
+      scrollBtn.classList.toggle('visible', window.scrollY > 400);
+    });
+
+    // FAQ accordion
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+  </script>
+
+</body>
+</html>
