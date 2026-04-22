@@ -25,8 +25,10 @@ from .agent import IncomingMessage
 from .messages import (
     AFTER_CLOSE_GREETING,
     BEFORE_OPEN_GREETING,
-    BUSINESS_DOC_DETAILS,
+    BUSINESS_DOC_BENEFITS,
+    BUSINESS_DOC_CLOSING,
     BUSINESS_DOC_IMMEDIATE,
+    BUSINESS_DOC_INTRO,
     BUSINESS_GREETING,
     OFFHOURS_DOC_RECEIVED,
 )
@@ -110,15 +112,19 @@ class TestBusinessHoursFlow(unittest.TestCase):
         self.assertEqual(responses[0].delay_seconds, 0)
         self.assertEqual(store.get("test_bh").state, ConvState.GREETED)
 
-    # Passo 2: documento → confirmação imediata + detalhes (5s)
-    def test_step2_document_two_messages(self):
+    # Passo 2: documento → 4 mensagens com delays 0, 5, 5, 5
+    def test_step2_document_four_messages(self):
         process(_text_msg("test_bh", BUSINESS_TS))  # greet first
         responses = process(_doc_msg("test_bh", BUSINESS_TS))
-        self.assertEqual(len(responses), 2)
+        self.assertEqual(len(responses), 4)
         self.assertEqual(responses[0].text, BUSINESS_DOC_IMMEDIATE)
         self.assertEqual(responses[0].delay_seconds, 0)
-        self.assertEqual(responses[1].text, BUSINESS_DOC_DETAILS)
+        self.assertEqual(responses[1].text, BUSINESS_DOC_INTRO)
         self.assertEqual(responses[1].delay_seconds, 5)
+        self.assertEqual(responses[2].text, BUSINESS_DOC_BENEFITS)
+        self.assertEqual(responses[2].delay_seconds, 5)
+        self.assertEqual(responses[3].text, BUSINESS_DOC_CLOSING)
+        self.assertEqual(responses[3].delay_seconds, 5)
 
     def test_step2_pdf_accepted(self):
         responses = process(_pdf_msg("test_bh", BUSINESS_TS))
@@ -139,7 +145,7 @@ class TestBusinessHoursFlow(unittest.TestCase):
     # Documento sem saudação prévia também funciona
     def test_document_without_prior_greeting(self):
         responses = process(_doc_msg("test_bh", BUSINESS_TS))
-        self.assertEqual(len(responses), 2)
+        self.assertEqual(len(responses), 4)
         self.assertEqual(store.get("test_bh").state, ConvState.SILENT)
 
 

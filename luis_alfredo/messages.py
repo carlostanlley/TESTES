@@ -12,20 +12,29 @@ BUSINESS_GREETING: str = (
     "pra eu dar uma olhada! 📄"
 )
 
-# Passo 2a: confirmação imediata ao receber o documento
+# Passo 2 — Mensagem 1: confirmação imediata (delay 0s)
 BUSINESS_DOC_IMMEDIATE: str = (
     "Ótimo! 😊 Recebi sua conta! Já encaminhei pra equipe analisar agora 🔍"
 )
 
-# Passo 2b: enviado 5 segundos após o 2a
-BUSINESS_DOC_DETAILS: str = (
-    "Enquanto isso, deixa eu te explicar como funciona 😊\n\n"
+# Passo 2 — Mensagem 2: introdução (delay 5s após mensagem 1)
+BUSINESS_DOC_INTRO: str = (
+    "Enquanto isso, deixa eu te explicar como funciona 😊"
+)
+
+# Passo 2 — Mensagem 3: benefícios (delay 5s após mensagem 2)
+BUSINESS_DOC_BENEFITS: str = (
     "✅ Desconto direto na fatura da luz — não mexe no salário\n"
     "✅ Não consulta SPC/Serasa — negativado aprova normalmente\n"
     "✅ Dinheiro na conta em até 24h\n"
     "✅ Até 24 parcelas\n"
     "✅ Pode antecipar parcelas pelo 0800 da Crefaz pagando só o valor "
     "principal — sem pagar juros futuros 📉"
+)
+
+# Passo 2 — Mensagem 4: encerramento (delay 5s após mensagem 3)
+BUSINESS_DOC_CLOSING: str = (
+    "Agora é só aguardar ⏳ Em minutos te passo o valor liberado pra você"
 )
 
 # ── Fora do horário comercial ─────────────────────────────────────────────────

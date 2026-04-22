@@ -15,8 +15,10 @@ from .messages import (
     ACCEPTED_MIME_TYPES,
     AFTER_CLOSE_GREETING,
     BEFORE_OPEN_GREETING,
-    BUSINESS_DOC_DETAILS,
+    BUSINESS_DOC_BENEFITS,
+    BUSINESS_DOC_CLOSING,
     BUSINESS_DOC_IMMEDIATE,
+    BUSINESS_DOC_INTRO,
     BUSINESS_GREETING,
     MEDIA_MESSAGE_TYPES,
     OFFHOURS_DOC_RECEIVED,
@@ -56,7 +58,9 @@ def _business_doc_flow() -> list[OutgoingMessage]:
     """Fluxo horário comercial após receber documento."""
     return [
         OutgoingMessage(text=BUSINESS_DOC_IMMEDIATE, delay_seconds=0),
-        OutgoingMessage(text=BUSINESS_DOC_DETAILS, delay_seconds=5),
+        OutgoingMessage(text=BUSINESS_DOC_INTRO,     delay_seconds=5),
+        OutgoingMessage(text=BUSINESS_DOC_BENEFITS,  delay_seconds=5),
+        OutgoingMessage(text=BUSINESS_DOC_CLOSING,   delay_seconds=5),
     ]
 
 
