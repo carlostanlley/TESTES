@@ -1,0 +1,205 @@
+{
+  "name": "Luis Alfredo — Agente WhatsApp Crefaz",
+  "nodes": [
+    {
+      "id": "node-webhook",
+      "name": "Webhook WhatsApp",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-entrada",
+        "responseMode": "onReceived",
+        "responseData": "firstEntryJson"
+      },
+      "webhookId": "whatsapp-entrada-luis-alfredo"
+    },
+    {
+      "id": "node-normalize",
+      "name": "Normalizar Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300],
+      "parameters": {
+        "jsCode": "// ──────────────────────────────────────────────────────────────\n// Normaliza o payload da Evolution API para o formato do agente.\n// Ajuste os campos se estiver usando Z-API ou Twilio.\n// ──────────────────────────────────────────────────────────────\nconst body = $input.first().json;\n\n// Evolution API v2\nconst data = body.data || body;\nconst key  = data.key     || {};\nconst msg  = data.message || {};\n\n// Detectar tipo e MIME\nlet messageType = 'text';\nlet mimeType    = '';\n\nif (msg.imageMessage) {\n  messageType = 'image';\n  mimeType    = msg.imageMessage.mimetype || 'image/jpeg';\n} else if (msg.documentMessage) {\n  messageType = 'document';\n  mimeType    = msg.documentMessage.mimetype || 'application/pdf';\n} else if (msg.audioMessage) {\n  messageType = 'audio';\n  mimeType    = 'audio/ogg';\n} else if (msg.videoMessage) {\n  messageType = 'video';\n  mimeType    = msg.videoMessage.mimetype || 'video/mp4';\n}\n\n// Mensagem enviada por atendente humano pelo painel\nconst isHuman = key.fromMe === true && !!data.participant;\n\nconst conversationId = key.remoteJid || body.remoteJid || '';\n\nreturn [{\n  json: {\n    conversation_id: conversationId,\n    message_type:    messageType,\n    text:            msg.conversation || msg.extendedTextMessage?.text || '',\n    mime_type:       mimeType,\n    is_human_agent:  isHuman,\n    timestamp:       null\n  }\n}];"
+      }
+    },
+    {
+      "id": "node-call-agent",
+      "name": "Chamar Agente Luis Alfredo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "http://SEU_IP:8000/webhook/message",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-API-Secret",
+              "value": "SUA_SENHA_AQUI"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={{ $json }}"
+      }
+    },
+    {
+      "id": "node-if",
+      "name": "Agente Ativo?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [900, 300],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-agent-active",
+              "leftValue": "={{ $json.agent_active }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "node-noop",
+      "name": "Silêncio (agente parado)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1120, 440],
+      "parameters": {}
+    },
+    {
+      "id": "node-prepare",
+      "name": "Preparar Mensagens",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 180],
+      "parameters": {
+        "jsCode": "// Converte o array messages em itens individuais do n8n,\n// cada um carregando texto, delay e conversation_id.\nconst conversationId = $input.first().json.conversation_id;\nconst messages       = $input.first().json.messages || [];\n\nreturn messages.map(m => ({\n  json: {\n    text:            m.text,\n    delay_seconds:   m.delay_seconds,\n    conversation_id: conversationId\n  }\n}));"
+      }
+    },
+    {
+      "id": "node-split",
+      "name": "Loop Mensagens",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1340, 180],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "node-wait",
+      "name": "Aguardar Delay",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1560, 180],
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $json.delay_seconds }}",
+        "unit": "seconds"
+      },
+      "webhookId": "wait-delay-luis-alfredo"
+    },
+    {
+      "id": "node-send",
+      "name": "Enviar Mensagem WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1780, 180],
+      "parameters": {
+        "method": "POST",
+        "url": "http://SEU_EVOLUTION:8080/message/sendText/NOME_DA_INSTANCIA",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "apikey",
+              "value": "SUA_EVOLUTION_API_KEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={{ JSON.stringify({ number: $json.conversation_id, text: $json.text }) }}"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook WhatsApp": {
+      "main": [
+        [{ "node": "Normalizar Payload", "type": "main", "index": 0 }]
+      ]
+    },
+    "Normalizar Payload": {
+      "main": [
+        [{ "node": "Chamar Agente Luis Alfredo", "type": "main", "index": 0 }]
+      ]
+    },
+    "Chamar Agente Luis Alfredo": {
+      "main": [
+        [{ "node": "Agente Ativo?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Agente Ativo?": {
+      "main": [
+        [{ "node": "Preparar Mensagens", "type": "main", "index": 0 }],
+        [{ "node": "Silêncio (agente parado)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Preparar Mensagens": {
+      "main": [
+        [{ "node": "Loop Mensagens", "type": "main", "index": 0 }]
+      ]
+    },
+    "Loop Mensagens": {
+      "main": [
+        [{ "node": "Aguardar Delay", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Aguardar Delay": {
+      "main": [
+        [{ "node": "Enviar Mensagem WhatsApp", "type": "main", "index": 0 }]
+      ]
+    },
+    "Enviar Mensagem WhatsApp": {
+      "main": [
+        [{ "node": "Loop Mensagens", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
