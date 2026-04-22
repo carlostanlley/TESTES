@@ -1,12 +1,25 @@
 {
-  "name": "Luis Alfredo — Agente WhatsApp Crefaz",
+  "name": "Luis Alfredo — Agente WhatsApp Crefaz (UazAPI)",
   "nodes": [
+    {
+      "id": "node-sticky",
+      "name": "⚙️ Configuração",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, 60],
+      "parameters": {
+        "content": "## ⚙️ O que configurar antes de ativar\n\n**1. Agente Luis Alfredo (FastAPI)**\n- Substitua `http://localhost:8000` pelo IP/URL do servidor\n- Se rodar local sem VPS: use ngrok para expor a porta 8000\n- Deixe `X-API-Secret` vazio se não definiu `AGENT_API_SECRET`\n\n**2. UazAPI — Envio**\n- Substitua `http://SEU_SERVIDOR_UAZAPI` pela URL da sua instância\n- Preencha `SUA_SESSION_KEY` (UUID do painel UazAPI)\n- Preencha `NOME_DA_SESSAO` (nome da sessão configurada)\n\n**3. UazAPI — Webhook de entrada**\n- No painel UazAPI, configure o webhook para:\n  `{URL_DO_SEU_N8N}/webhook/whatsapp-entrada`\n\n**4. Handover (opcional)**\n- Use o endpoint `POST /webhook/handoff` no servidor\n  quando um atendente humano assumir a conversa",
+        "height": 340,
+        "width": 480,
+        "color": 4
+      }
+    },
     {
       "id": "node-webhook",
       "name": "Webhook WhatsApp",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [240, 300],
+      "position": [240, 440],
       "parameters": {
         "httpMethod": "POST",
         "path": "whatsapp-entrada",
@@ -16,13 +29,49 @@
       "webhookId": "whatsapp-entrada-luis-alfredo"
     },
     {
+      "id": "node-filter",
+      "name": "É Mensagem Recebida?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [460, 440],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-wook",
+              "leftValue": "={{ $json.wook }}",
+              "rightValue": "RECEIVE_MESSAGE",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "node-ignore",
+      "name": "Ignorar (status/QR/etc)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [680, 560],
+      "parameters": {}
+    },
+    {
       "id": "node-normalize",
-      "name": "Normalizar Payload",
+      "name": "Normalizar Payload UazAPI",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [460, 300],
+      "position": [680, 380],
       "parameters": {
-        "jsCode": "// ──────────────────────────────────────────────────────────────\n// Normaliza o payload da Evolution API para o formato do agente.\n// Ajuste os campos se estiver usando Z-API ou Twilio.\n// ──────────────────────────────────────────────────────────────\nconst body = $input.first().json;\n\n// Evolution API v2\nconst data = body.data || body;\nconst key  = data.key     || {};\nconst msg  = data.message || {};\n\n// Detectar tipo e MIME\nlet messageType = 'text';\nlet mimeType    = '';\n\nif (msg.imageMessage) {\n  messageType = 'image';\n  mimeType    = msg.imageMessage.mimetype || 'image/jpeg';\n} else if (msg.documentMessage) {\n  messageType = 'document';\n  mimeType    = msg.documentMessage.mimetype || 'application/pdf';\n} else if (msg.audioMessage) {\n  messageType = 'audio';\n  mimeType    = 'audio/ogg';\n} else if (msg.videoMessage) {\n  messageType = 'video';\n  mimeType    = msg.videoMessage.mimetype || 'video/mp4';\n}\n\n// Mensagem enviada por atendente humano pelo painel\nconst isHuman = key.fromMe === true && !!data.participant;\n\nconst conversationId = key.remoteJid || body.remoteJid || '';\n\nreturn [{\n  json: {\n    conversation_id: conversationId,\n    message_type:    messageType,\n    text:            msg.conversation || msg.extendedTextMessage?.text || '',\n    mime_type:       mimeType,\n    is_human_agent:  isHuman,\n    timestamp:       null\n  }\n}];"
+        "jsCode": "// ──────────────────────────────────────────────────────────────────\n// Converte o payload da UazAPI para o formato do agente Luis Alfredo.\n//\n// Campos UazAPI confirmados (webhook RECEIVE_MESSAGE):\n//   wook    → \"RECEIVE_MESSAGE\"\n//   sender  → número de quem enviou (ex: \"5585999999999\")\n//   content → texto da mensagem\n//   type    → \"text\" | \"image\" | \"document\" | \"audio\" | \"video\"\n//   session → nome da sessão\n// ──────────────────────────────────────────────────────────────────\n\nconst body = $input.first().json;\n\nconst messageType = (body.type || 'text').toLowerCase();\n\n// UazAPI não envia mime_type no webhook;\n// o agente detecta imagem/PDF pelo messageType (image, document)\nconst mimeType = '';\n\n// Handover: UazAPI não distingue mensagens do atendente humano\n// via webhook. Use o endpoint POST /webhook/handoff separado.\nconst isHuman = false;\n\nreturn [{\n  json: {\n    conversation_id: String(body.sender || ''),\n    message_type:    messageType,\n    text:            body.content || '',\n    mime_type:       mimeType,\n    is_human_agent:  isHuman,\n    timestamp:       null\n  }\n}];"
       }
     },
     {
@@ -30,10 +79,10 @@
       "name": "Chamar Agente Luis Alfredo",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [680, 300],
+      "position": [900, 380],
       "parameters": {
         "method": "POST",
-        "url": "http://SEU_IP:8000/webhook/message",
+        "url": "http://localhost:8000/webhook/message",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -43,7 +92,7 @@
             },
             {
               "name": "X-API-Secret",
-              "value": "SUA_SENHA_AQUI"
+              "value": ""
             }
           ]
         },
@@ -53,11 +102,11 @@
       }
     },
     {
-      "id": "node-if",
+      "id": "node-if-active",
       "name": "Agente Ativo?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [900, 300],
+      "position": [1120, 380],
       "parameters": {
         "conditions": {
           "options": {
@@ -82,10 +131,10 @@
     },
     {
       "id": "node-noop",
-      "name": "Silêncio (agente parado)",
+      "name": "Silêncio (SILENT/HANDOVER)",
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
-      "position": [1120, 440],
+      "position": [1340, 520],
       "parameters": {}
     },
     {
@@ -93,9 +142,9 @@
       "name": "Preparar Mensagens",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1120, 180],
+      "position": [1340, 260],
       "parameters": {
-        "jsCode": "// Converte o array messages em itens individuais do n8n,\n// cada um carregando texto, delay e conversation_id.\nconst conversationId = $input.first().json.conversation_id;\nconst messages       = $input.first().json.messages || [];\n\nreturn messages.map(m => ({\n  json: {\n    text:            m.text,\n    delay_seconds:   m.delay_seconds,\n    conversation_id: conversationId\n  }\n}));"
+        "jsCode": "// Expande o array messages em itens individuais do n8n.\n// Cada item carrega: text, delay_seconds, conversation_id.\nconst conversationId = $input.first().json.conversation_id;\nconst messages       = $input.first().json.messages || [];\n\nreturn messages.map(m => ({\n  json: {\n    text:            m.text,\n    delay_seconds:   m.delay_seconds,\n    conversation_id: conversationId\n  }\n}));"
       }
     },
     {
@@ -103,7 +152,7 @@
       "name": "Loop Mensagens",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
-      "position": [1340, 180],
+      "position": [1560, 260],
       "parameters": {
         "batchSize": 1,
         "options": {}
@@ -114,7 +163,7 @@
       "name": "Aguardar Delay",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [1560, 180],
+      "position": [1780, 260],
       "parameters": {
         "resume": "timeInterval",
         "amount": "={{ $json.delay_seconds }}",
@@ -124,13 +173,13 @@
     },
     {
       "id": "node-send",
-      "name": "Enviar Mensagem WhatsApp",
+      "name": "Enviar Mensagem (UazAPI)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1780, 180],
+      "position": [2000, 260],
       "parameters": {
         "method": "POST",
-        "url": "http://SEU_EVOLUTION:8080/message/sendText/NOME_DA_INSTANCIA",
+        "url": "http://SEU_SERVIDOR_UAZAPI/sendText",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -139,24 +188,30 @@
               "value": "application/json"
             },
             {
-              "name": "apikey",
-              "value": "SUA_EVOLUTION_API_KEY"
+              "name": "sessionkey",
+              "value": "SUA_SESSION_KEY"
             }
           ]
         },
         "sendBody": true,
         "contentType": "json",
-        "body": "={{ JSON.stringify({ number: $json.conversation_id, text: $json.text }) }}"
+        "body": "={{ JSON.stringify({ session: 'NOME_DA_SESSAO', number: $json.conversation_id, text: $json.text }) }}"
       }
     }
   ],
   "connections": {
     "Webhook WhatsApp": {
       "main": [
-        [{ "node": "Normalizar Payload", "type": "main", "index": 0 }]
+        [{ "node": "É Mensagem Recebida?", "type": "main", "index": 0 }]
       ]
     },
-    "Normalizar Payload": {
+    "É Mensagem Recebida?": {
+      "main": [
+        [{ "node": "Normalizar Payload UazAPI", "type": "main", "index": 0 }],
+        [{ "node": "Ignorar (status/QR/etc)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Normalizar Payload UazAPI": {
       "main": [
         [{ "node": "Chamar Agente Luis Alfredo", "type": "main", "index": 0 }]
       ]
@@ -169,7 +224,7 @@
     "Agente Ativo?": {
       "main": [
         [{ "node": "Preparar Mensagens", "type": "main", "index": 0 }],
-        [{ "node": "Silêncio (agente parado)", "type": "main", "index": 0 }]
+        [{ "node": "Silêncio (SILENT/HANDOVER)", "type": "main", "index": 0 }]
       ]
     },
     "Preparar Mensagens": {
@@ -185,10 +240,10 @@
     },
     "Aguardar Delay": {
       "main": [
-        [{ "node": "Enviar Mensagem WhatsApp", "type": "main", "index": 0 }]
+        [{ "node": "Enviar Mensagem (UazAPI)", "type": "main", "index": 0 }]
       ]
     },
-    "Enviar Mensagem WhatsApp": {
+    "Enviar Mensagem (UazAPI)": {
       "main": [
         [{ "node": "Loop Mensagens", "type": "main", "index": 0 }]
       ]
