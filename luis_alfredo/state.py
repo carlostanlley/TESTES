@@ -69,10 +69,9 @@ class StateStore:
 
     def handover(self, conversation_id: str) -> None:
         with self._lock:
-            conv = self._store.get(conversation_id)
-            if conv:
-                conv.state = ConvState.HANDOVER
-                conv.touch()
+            conv = self._store.setdefault(conversation_id, Conversation())
+            conv.state = ConvState.HANDOVER
+            conv.touch()
 
     def reset(self, conversation_id: str) -> None:
         with self._lock:

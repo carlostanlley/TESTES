@@ -42,10 +42,10 @@ BUSINESS_DOC_CLOSING: str = (
 # Antes das 08h00
 BEFORE_OPEN_GREETING: str = (
     "Olá! 😊\n\n"
-    "Nossa equipe está se preparando \n"
+    "Nossa equipe está se preparando\n"
     "para iniciar o atendimento!\n\n"
-    "Enquanto isso, me manda a foto \n"
-    "ou PDF da sua conta de luz \n"
+    "Enquanto isso, me manda a foto\n"
+    "ou PDF da sua conta de luz\n"
     "pra deixar tudo pronto! 📄\n\n"
     "Você sai na frente! 🚀"
 )
@@ -53,12 +53,12 @@ BEFORE_OPEN_GREETING: str = (
 # Após as 18h00 e fins de semana
 AFTER_CLOSE_GREETING: str = (
     "Olá! 😊\n\n"
-    "Nossa equipe encerrou por hoje! \n"
+    "Nossa equipe encerrou por hoje!\n"
     "Mas voltamos amanhã às 8h 😊\n\n"
-    "📄 Me manda a foto ou PDF da \n"
+    "📄 Me manda a foto ou PDF da\n"
     "sua conta de luz agora\n\n"
-    "Amanhã nossa equipe retorna \n"
-    "o contato com sua proposta \n"
+    "Amanhã nossa equipe retorna\n"
+    "o contato com sua proposta\n"
     "em mãos!"
 )
 
@@ -66,8 +66,8 @@ AFTER_CLOSE_GREETING: str = (
 OFFHOURS_DOC_RECEIVED: str = (
     "Perfeito! ✅\n\n"
     "Recebi sua conta de luz!\n\n"
-    "Amanhã às 8h nossa equipe \n"
-    "te retorna aqui com sua \n"
+    "Amanhã às 8h nossa equipe\n"
+    "te retorna aqui com sua\n"
     "proposta 🎉"
 )
 

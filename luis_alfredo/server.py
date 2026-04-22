@@ -2,14 +2,14 @@
 Servidor webhook FastAPI — Luis Alfredo Agent.
 
 Endpoints:
-  POST /webhook/message   — recebe mensagem do lead (via n8n / WhatsApp API)
-  POST /webhook/handoff   — notifica que humano assumiu a conversa
+  POST /webhook/message    — recebe mensagem do lead (via n8n / UazAPI / Z-API)
+  POST /webhook/handoff    — notifica que humano assumiu a conversa
   DELETE /admin/reset/{id} — reseta estado de uma conversa (testes/admin)
-  GET  /admin/state/{id}  — consulta estado atual de uma conversa
-  GET  /admin/store       — snapshot de todas as conversas ativas
-  GET  /health            — health check
+  GET  /admin/state/{id}   — consulta estado atual de uma conversa
+  GET  /admin/store        — snapshot de todas as conversas ativas
+  GET  /health             — health check
 
-Compatível com Evolution API, Z-API, Twilio ou n8n como intermediário.
+Compatível com UazAPI, Evolution API, Z-API, Twilio ou n8n como intermediário.
 """
 
 from __future__ import annotations
@@ -17,11 +17,11 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
-from datetime import datetime
+from contextlib import asynccontextmanager
+from datetime import datetime, timezone
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from .agent import IncomingMessage, OutgoingMessage, process
@@ -39,7 +39,28 @@ log = logging.getLogger("luis_alfredo")
 
 def _log(event: str, **kwargs: Any) -> None:
     import json
-    log.info(json.dumps({"event": event, "ts": datetime.utcnow().isoformat(), **kwargs}))
+    log.info(json.dumps({"event": event, "ts": datetime.now(timezone.utc).isoformat(), **kwargs}))
+
+
+# ── Limpeza periódica ─────────────────────────────────────────────────────────
+
+async def _purge_loop() -> None:
+    while True:
+        await asyncio.sleep(3600)
+        removed = store.purge_expired()
+        if removed:
+            _log("purge_expired", removed=removed)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    task = asyncio.create_task(_purge_loop())
+    yield
+    task.cancel()
+    try:
+        await task
+    except asyncio.CancelledError:
+        pass
 
 
 # ── App ───────────────────────────────────────────────────────────────────────
@@ -49,6 +70,7 @@ app = FastAPI(
     description="Agente de atendimento — Empréstimo na Conta de Luz (Crefaz)",
     version="1.0.0",
     docs_url="/docs",
+    lifespan=lifespan,
 )
 
 API_SECRET = os.environ.get("AGENT_API_SECRET", "")  # deixe vazio para desabilitar auth
@@ -65,9 +87,7 @@ def _check_secret(request: Request) -> None:
 # ── Schemas de entrada ────────────────────────────────────────────────────────
 
 class MessagePayload(BaseModel):
-    """
-    Mensagem normalizada enviada pelo integrador (n8n ou WhatsApp API adapter).
-    """
+    """Mensagem normalizada enviada pelo integrador (n8n ou WhatsApp API adapter)."""
     conversation_id: str = Field(..., description="ID único da conversa (ex: número WhatsApp)")
     message_type: str = Field(
         default="text",
@@ -193,18 +213,3 @@ async def admin_store(request: Request) -> dict:
 @app.get("/health")
 async def health() -> dict:
     return {"status": "ok", "agent": "luis_alfredo", "version": "1.0.0"}
-
-
-# ── Limpeza periódica ─────────────────────────────────────────────────────────
-
-@app.on_event("startup")
-async def start_purge_task() -> None:
-    """Inicia tarefa de limpeza de conversas expiradas a cada hora."""
-    async def _purge_loop() -> None:
-        while True:
-            await asyncio.sleep(3600)
-            removed = store.purge_expired()
-            if removed:
-                _log("purge_expired", removed=removed)
-
-    asyncio.create_task(_purge_loop())
